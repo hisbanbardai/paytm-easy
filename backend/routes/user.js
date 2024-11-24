@@ -1,7 +1,9 @@
 const router = require("express").Router();
-const { signUpSchema } = require("../types");
-const { hashPassword } = require("../db/utils/passwordUtils");
+const { signUpSchema, signInSchema } = require("../types");
+const { hashPassword, comparePassword } = require("../db/utils/passwordUtils");
 const { getUserByUsername, addUser } = require("../db/queries/user");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = require("../config");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -25,9 +27,11 @@ router.post("/signup", async (req, res) => {
       });
     }
 
-    const hashedPassword = hashPassword(password);
+    const hashedPassword = await hashPassword(password);
+    console.log(hashedPassword);
 
     result = await addUser(firstname, lastname, username, hashedPassword);
+    console.log(result);
 
     if (result.message) {
       return res.status(400).json({ error: result.message });
@@ -40,6 +44,36 @@ router.post("/signup", async (req, res) => {
     console.error("Error in user registration:", error.message);
     return res.status(500).json({ error: "Internal Server Error" });
   }
+});
+
+router.post("/signin", async (req, res) => {
+  const signInPayload = req.body;
+
+  const { success } = signInSchema.safeParse(signInPayload);
+
+  if (!success) {
+    return res.status(411).json({ message: "Invalid inputs" });
+  }
+
+  const { username, password } = req.body;
+
+  const result = await getUserByUsername(username);
+
+  if (result.rows.length === 0) {
+    return res.status(411).json({
+      message: "Incorrect username or password",
+    });
+  }
+
+  const dbHashedPassword = result.rows[0].password;
+
+  if (!(await comparePassword(password, dbHashedPassword))) {
+    return res.status(411).json({ message: "Incorrect username or password" });
+  }
+
+  const token = jwt.sign({ userId: result.rows[0].id }, JWT_SECRET);
+
+  return res.status(200).json({ token: token });
 });
 
 module.exports = router;
