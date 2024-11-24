@@ -9,4 +9,9 @@ const signUpSchema = z.object({
     .min(6, { message: "Password must be 6 or more characters long" }),
 });
 
-module.exports = { signUpSchema };
+const signInSchema = z.object({
+  username: z.string().email(),
+  password: z.string(),
+});
+
+module.exports = { signUpSchema, signInSchema };
