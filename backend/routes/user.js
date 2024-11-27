@@ -1,9 +1,14 @@
 const router = require("express").Router();
-const { signUpSchema, signInSchema } = require("../types");
+const { signUpSchema, signInSchema, userUpdateSchema } = require("../types");
 const { hashPassword, comparePassword } = require("../db/utils/passwordUtils");
-const { getUserByUsername, addUser } = require("../db/queries/user");
+const {
+  getUserByUsername,
+  addUser,
+  updateUser,
+} = require("../db/queries/user");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = require("../config");
+const authMiddleware = require("../middleware/authMiddleware");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -74,6 +79,33 @@ router.post("/signin", async (req, res) => {
   const token = jwt.sign({ userId: result.rows[0].id }, JWT_SECRET);
 
   return res.status(200).json({ token: token });
+});
+
+router.put("/", authMiddleware, async (req, res) => {
+  const userUpdatePayload = req.body;
+
+  if (Object.keys(userUpdatePayload).length === 0) {
+    return res.status(411).json({ message: "There are no fields to update" });
+  }
+
+  let obj = userUpdateSchema.safeParse(userUpdatePayload);
+
+  if (!obj.success) {
+    return res.status(411).json({ message: obj.error.errors });
+  }
+
+  if (obj.data.password) {
+    const hashedPassword = await hashPassword(obj.data.password);
+    obj.data = { ...obj.data, password: hashedPassword };
+  }
+
+  const result = await updateUser({ ...obj.data, id: req.userId });
+
+  if (result.message) {
+    return res.status(200).json(result);
+  }
+
+  return res.status(411).json(result);
 });
 
 module.exports = router;
