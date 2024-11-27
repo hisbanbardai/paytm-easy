@@ -5,6 +5,7 @@ const {
   getUserByUsername,
   addUser,
   updateUser,
+  searchUser,
 } = require("../db/queries/user");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = require("../config");
@@ -106,6 +107,17 @@ router.put("/", authMiddleware, async (req, res) => {
   }
 
   return res.status(411).json(result);
+});
+
+router.get("/bulk", authMiddleware, async (req, res) => {
+  const { filter } = req.query;
+  const result = await searchUser(filter);
+
+  if (result.data) {
+    res.status(200).json({ users: result.data });
+  }
+
+  res.status(404).json(result);
 });
 
 module.exports = router;
