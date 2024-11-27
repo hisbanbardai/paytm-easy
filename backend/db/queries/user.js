@@ -38,4 +38,34 @@ const addUser = async function (firstName, lastName, username, password) {
   }
 };
 
-module.exports = { getUserByUsername, addUser };
+const updateUser = async function (userObj) {
+  let setClause = `SET `;
+  const values = Object.values(userObj);
+  let count = 1;
+
+  for (const key of Object.keys(userObj).slice(
+    0,
+    Object.keys(userObj).length - 1
+  )) {
+    setClause += `${key} = $${count}, `;
+    count += 1;
+  }
+
+  setClause = setClause.slice(0, setClause.length - 2);
+
+  try {
+    const query = `UPDATE USERS ${setClause} WHERE id = $${values.length} RETURNING *`;
+    const result = await client.query(query, values);
+
+    if (result.rows.length === 1) {
+      return { message: "User updated successfully" };
+    }
+
+    return { error: "Error while updating information" };
+  } catch (error) {
+    console.error(error.message);
+    return { error: error.message };
+  }
+};
+
+module.exports = { getUserByUsername, addUser, updateUser };
