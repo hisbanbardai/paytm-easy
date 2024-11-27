@@ -68,4 +68,24 @@ const updateUser = async function (userObj) {
   }
 };
 
-module.exports = { getUserByUsername, addUser, updateUser };
+const searchUser = async function (filter) {
+  try {
+    if (filter) {
+      const values = [`%${filter}%`];
+      const query = `SELECT id, firstname, lastname from users WHERE firstname ILIKE $1 OR lastname ILIKE $1`;
+
+      const result = await client.query(query, values);
+
+      if (result.rows.length > 0) {
+        return { data: result.rows };
+      }
+
+      return { message: "No user found" };
+    }
+  } catch (error) {
+    console.error(error.message);
+    return { error: error.message };
+  }
+};
+
+module.exports = { getUserByUsername, addUser, updateUser, searchUser };
