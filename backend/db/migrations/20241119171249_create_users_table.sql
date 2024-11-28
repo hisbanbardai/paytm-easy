@@ -1,5 +1,5 @@
 -- Migration: create_users_table
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TABLE
   users (
