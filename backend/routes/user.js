@@ -110,14 +110,14 @@ router.put("/", authMiddleware, async (req, res) => {
 });
 
 router.get("/bulk", authMiddleware, async (req, res) => {
-  const { filter } = req.query;
+  const filter = req.query.filter || "";
   const result = await searchUser(filter);
 
   if (result.data) {
-    res.status(200).json({ users: result.data });
+    return res.status(200).json({ users: result.data });
   }
 
-  res.status(404).json(result);
+  return res.status(404).json(result);
 });
 
 module.exports = router;
