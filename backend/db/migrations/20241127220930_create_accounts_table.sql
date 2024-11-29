@@ -5,5 +5,5 @@ CREATE TABLE
   accounts (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    balance NUMERIC(12, 2) NOT NULL
+    balance INTEGER NOT NULL
   )
