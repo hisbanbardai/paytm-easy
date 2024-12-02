@@ -16,6 +16,20 @@ const getUserByUsername = async function (username) {
   }
 };
 
+const getUserByUserId = async function (userId) {
+  try {
+    const query = `SELECT * from users where id = $1`;
+    const values = [userId];
+
+    return await client.query(query, values);
+  } catch (error) {
+    return {
+      message: "An error occurred while fetching a user by user id",
+      error: error,
+    };
+  }
+};
+
 const addUser = async function (firstName, lastName, username, password) {
   try {
     const query = `INSERT INTO users (firstname, lastname, username, password) VALUES($1, $2, $3, $4) RETURNING *`;
@@ -76,4 +90,10 @@ const searchUser = async function (filter) {
   }
 };
 
-module.exports = { getUserByUsername, addUser, updateUser, searchUser };
+module.exports = {
+  getUserByUsername,
+  addUser,
+  updateUser,
+  searchUser,
+  getUserByUserId,
+};

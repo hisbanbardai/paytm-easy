@@ -29,4 +29,41 @@ const getBalance = async function (userId) {
   }
 };
 
-module.exports = { createAccount, getBalance };
+const transferAmount = async function (senderId, receiverId, amount) {
+  try {
+    await client.query(`BEGIN`);
+
+    const { rows } = await getBalance(senderId);
+
+    const senderBalance = rows[0].balance;
+
+    if (senderBalance < amount) {
+      throw new Error("Insufficient funds");
+    }
+
+    await client.query(
+      `UPDATE accounts SET balance = balance - $1 WHERE user_id = $2`,
+      [amount, senderId]
+    );
+
+    await client.query(
+      `UPDATE accounts SET balance = balance + $1 WHERE user_id = $2`,
+      [amount, receiverId]
+    );
+
+    await client.query(`COMMIT`);
+
+    return {
+      message: "Transfer successful",
+    };
+  } catch (error) {
+    await client.query(`ROLLBACK`);
+
+    return {
+      message: "Transaction failed due to an error",
+      error: error.message,
+    };
+  }
+};
+
+module.exports = { createAccount, getBalance, transferAmount };
