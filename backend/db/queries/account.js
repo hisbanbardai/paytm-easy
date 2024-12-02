@@ -15,4 +15,18 @@ const createAccount = async function (userId) {
   }
 };
 
-module.exports = { createAccount };
+const getBalance = async function (userId) {
+  try {
+    const query = `SELECT balance FROM accounts WHERE user_id = $1`;
+    const values = [userId];
+
+    return await client.query(query, values);
+  } catch (error) {
+    return {
+      message: "An error occurred while fetching the balance of this user",
+      error: error,
+    };
+  }
+};
+
+module.exports = { createAccount, getBalance };
