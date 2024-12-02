@@ -23,13 +23,7 @@ const addUser = async function (firstName, lastName, username, password) {
 
     const result = await client.query(query, values);
 
-    if (result.rows.length === 1) {
-      const userId = result.rows[0].id;
-
-      const token = jwt.sign({ userId: userId }, JWT_SECRET);
-      return { token: token };
-    }
-    return { message: "Unable to add a user." };
+    return result;
   } catch (error) {
     return {
       message: "An error occurred while adding the user.",

@@ -10,6 +10,7 @@ const {
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = require("../config");
 const authMiddleware = require("../middleware/authMiddleware");
+const { createAccount } = require("../db/queries/account");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -34,18 +35,23 @@ router.post("/signup", async (req, res) => {
     }
 
     const hashedPassword = await hashPassword(password);
-    console.log(hashedPassword);
 
     result = await addUser(firstname, lastname, username, hashedPassword);
-    console.log(result);
 
-    if (result.message) {
-      return res.status(400).json({ error: result.message });
+    if (result.rows.length === 1) {
+      const userId = result.rows[0].id;
+
+      //Create account
+      const data = await createAccount(userId);
+
+      if (data.rows.length === 1) {
+        const token = jwt.sign({ userId: userId }, JWT_SECRET);
+        return res
+          .status(200)
+          .json({ message: "User created successfully", token: token });
+      }
     }
-
-    return res
-      .status(200)
-      .json({ message: "User created successfully", token: result.token });
+    return { message: "Unable to add a user." };
   } catch (error) {
     console.error("Error in user registration:", error.message);
     return res.status(500).json({ error: "Internal Server Error" });
