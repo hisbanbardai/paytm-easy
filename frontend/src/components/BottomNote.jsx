@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 
 export default function BottomNote({ label, linkText }) {
   return (
-    <p>
-      {label}
-      <Link to={"/signin"}>{linkText}</Link>
-    </p>
+    <>
+      <p>{label}</p>
+      <Link className="text-decoration-line: underline" to={"/signin"}>
+        {linkText}
+      </Link>
+    </>
   );
 }
