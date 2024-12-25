@@ -1,3 +1,3 @@
 export default function Dashboard() {
-  return <p>Dashboard page</p>;
+  return <p className="bg-slate-400">Dashboard page</p>;
 }
