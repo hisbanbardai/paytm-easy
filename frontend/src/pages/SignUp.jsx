@@ -22,7 +22,11 @@ export default function SignUp() {
           </div>
         </form>
         <footer className="flex justify-center gap-1 text-lg text-slate-700">
-          <BottomNote label="Already have an account?" linkText="Sign in" />
+          <BottomNote
+            label="Already have an account?"
+            linkText="Sign in"
+            to="/signin"
+          />
         </footer>
       </section>
     </main>
