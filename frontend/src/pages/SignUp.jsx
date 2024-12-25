@@ -1,22 +1,21 @@
+import BottomNote from "../components/BottomNote";
+import Button from "../components/Button";
+import Heading from "../components/Heading";
+import InputBox from "../components/InputBox";
+import SubHeading from "../components/SubHeading";
+
 export default function SignUp() {
   return (
     <div>
       <div>
-        <h2>Sign up</h2>
-        <p>Enter your information to create an account</p>
-
-        <label htmlFor="">First Name</label>
-        <input type="text" placeholder="John" />
-        <label htmlFor="">Last Name</label>
-        <input type="text" placeholder="Doe" />
-        <label htmlFor="">Email</label>
-        <input type="text" placeholder="test@gmail.com" />
-        <label htmlFor="">Password</label>
-        <input type="text" placeholder="123456" />
-
-        <button>Sign up</button>
-
-        <p>Already have an account? Sign in</p>
+        <Heading label="Sign up" />
+        <SubHeading label="Enter your information to create an account" />
+        <InputBox label={"First Name"} placeholder={"John"} />
+        <InputBox label={"Last Name"} placeholder={"Doe"} />
+        <InputBox label={"Email"} placeholder={"john@gmail.com"} />
+        <InputBox label={"Password"} placeholder={"123456"} />
+        <Button label="Sign up" />
+        <BottomNote label="Already have an account?" linkText="Sign in" />
       </div>
     </div>
   );
