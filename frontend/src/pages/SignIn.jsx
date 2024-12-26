@@ -13,13 +13,18 @@ export default function SignIn() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    axios.post("http://localhost:3000/api/v1/user/signin", {
-      username: formData.username,
-      password: formData.password,
-    });
+    const response = await axios.post(
+      "http://localhost:3000/api/v1/user/signin",
+      {
+        username: formData.username,
+        password: formData.password,
+      }
+    );
+
+    localStorage.setItem("token", response.data.token);
   }
 
   return (

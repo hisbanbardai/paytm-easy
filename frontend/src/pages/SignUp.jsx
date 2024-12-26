@@ -28,15 +28,20 @@ export default function SignUp() {
     setPassword(e.target.value);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    axios.post("http://localhost:3000/api/v1/user/signup", {
-      firstname,
-      lastname,
-      username,
-      password,
-    });
+    const response = await axios.post(
+      "http://localhost:3000/api/v1/user/signup",
+      {
+        firstname,
+        lastname,
+        username,
+        password,
+      }
+    );
+
+    localStorage.setItem("token", response.data.token);
   }
 
   return (
