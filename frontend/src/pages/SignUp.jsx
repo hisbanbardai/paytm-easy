@@ -50,24 +50,28 @@ export default function SignUp() {
           <InputBox
             label={"First Name"}
             placeholder={"John"}
+            name={"firstname"}
             value={firstname}
             onChange={handleChangeFirstName}
           />
           <InputBox
             label={"Last Name"}
             placeholder={"Doe"}
+            name={"lastname"}
             value={lastname}
             onChange={handleChangeLastName}
           />
           <InputBox
             label={"Email"}
             placeholder={"john@gmail.com"}
+            name={"username"}
             value={username}
             onChange={handleChangeUsername}
           />
           <InputBox
             label={"Password"}
             placeholder={"123456"}
+            name={"password"}
             value={password}
             onChange={handleChangePassword}
           />

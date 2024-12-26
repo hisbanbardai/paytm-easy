@@ -1,4 +1,10 @@
-export default function InputBox({ label, placeholder, value, onChange }) {
+export default function InputBox({
+  label,
+  placeholder,
+  name,
+  value,
+  onChange,
+}) {
   return (
     <div className="flex flex-col gap-3">
       <label className="text-black font-semibold">{label}</label>
@@ -6,6 +12,7 @@ export default function InputBox({ label, placeholder, value, onChange }) {
         className="border-2 p-3 rounded-md"
         type="text"
         placeholder={placeholder}
+        name={name}
         value={value}
         onChange={onChange}
       />
