@@ -4,11 +4,12 @@ import axios from "axios";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    async function fetchUsers() {
+    const timerId = setTimeout(async () => {
       const response = await axios.get(
-        "http://localhost:3000/api/v1/user/bulk",
+        `http://localhost:3000/api/v1/user/bulk?filter=${filter}`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -17,10 +18,10 @@ export default function Users() {
       );
 
       setUsers(response.data.users);
-    }
+    }, 300);
 
-    fetchUsers();
-  }, []);
+    return () => clearTimeout(timerId);
+  }, [filter]);
 
   return (
     <section className="flex flex-col gap-3">
@@ -29,6 +30,7 @@ export default function Users() {
         className="border-2 p-2 text-lg rounded-lg"
         type="text"
         placeholder="Search users..."
+        onChange={(e) => setFilter(e.target.value)}
       />
       <div>
         {users.map((user) => (
