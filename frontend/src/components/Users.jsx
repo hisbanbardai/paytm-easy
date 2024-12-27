@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -42,13 +43,18 @@ export default function Users() {
 }
 
 function User({ user }) {
+  const navigate = useNavigate();
+
   return (
     <div className="flex justify-between items-center">
       <div className="flex gap-2 items-center font-medium text-xl mt-4">
         <Avatar value={user.firstname[0].toUpperCase()} />
         <p>{user.firstname}</p>
       </div>
-      <button className="bg-slate-700 text-white p-3 px-4 rounded-lg">
+      <button
+        onClick={() => navigate(`/send?id=${user.id}&name=${user.firstname}`)}
+        className="bg-slate-700 text-white p-3 px-4 rounded-lg"
+      >
         Send Money
       </button>
     </div>
