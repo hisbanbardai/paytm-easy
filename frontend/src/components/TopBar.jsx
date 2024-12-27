@@ -1,17 +1,32 @@
 import { Link, useNavigate } from "react-router-dom";
 import Avatar from "./Avatar";
 
-export default function TopBar() {
+export default function TopBar({ isAuthenticated }) {
   const navigate = useNavigate();
 
+  function handleClick() {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  }
+
   return (
-    <header className="flex justify-between px-4 py-2 shadow-md items-center text-xl">
+    <header className="flex justify-between px-4 py-2 shadow-md items-center text-xl h-16">
       <button onClick={() => navigate("/")} className="font-semibold">
         PayTM App
       </button>
-      <p className="font-medium flex gap-3 items-center">
-        Hello <Avatar value={"U"} />
-      </p>
+      <div className="flex gap-9">
+        {isAuthenticated && (
+          <p className="font-medium flex gap-3 items-center">
+            Hello <Avatar value={"U"} />
+          </p>
+        )}
+
+        {isAuthenticated && (
+          <button onClick={handleClick} className="font-medium">
+            Log out
+          </button>
+        )}
+      </div>
     </header>
   );
 }

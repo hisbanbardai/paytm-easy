@@ -43,7 +43,7 @@ function App() {
 
   return (
     <>
-      <TopBar />
+      <TopBar isAuthenticated={isAuthenticated} />
       <Routes>
         <Route
           path="/"
