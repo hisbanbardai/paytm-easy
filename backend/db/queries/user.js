@@ -76,10 +76,10 @@ const updateUser = async function (userObj) {
   }
 };
 
-const searchUser = async function (filter) {
+const searchUser = async function (filter, loggedInUserId) {
   try {
-    const values = [`%${filter}%`];
-    const query = `SELECT id, firstname, lastname from users WHERE firstname ILIKE $1 OR lastname ILIKE $1`;
+    const values = [`%${filter}%`, loggedInUserId];
+    const query = `SELECT id, firstname, lastname from users WHERE (firstname ILIKE $1 OR lastname ILIKE $1) AND id <> $2`;
 
     const result = await client.query(query, values);
 
