@@ -31,6 +31,10 @@ const getBalance = async function (userId) {
 
 const transferAmount = async function (senderId, receiverId, amount) {
   try {
+    if (amount < 0 || amount === 0) {
+      throw new Error("Amount cannot be zero or less than zero");
+    }
+
     await client.query(`BEGIN`);
 
     const { rows } = await getBalance(senderId);

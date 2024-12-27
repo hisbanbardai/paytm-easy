@@ -2,20 +2,27 @@ import { useSearchParams } from "react-router-dom";
 import Avatar from "../components/Avatar";
 import axios from "axios";
 import { useState } from "react";
+import Error from "../components/Error";
 
 export default function SendMoney() {
   const [searchParams] = useSearchParams();
   const [amount, setAmount] = useState(null);
+  const [showError, setShowError] = useState(false);
 
   const id = searchParams.get("id");
   const name = searchParams.get("name");
 
   function handleClick() {
+    if (amount === 0 || amount < 0) {
+      setShowError(true);
+      return;
+    }
+
     axios.post(
       "http://localhost:3000/api/v1/account/transfer",
       {
         to: `${id}`,
-        amount: parseInt(amount),
+        amount: amount,
       },
       {
         headers: {
@@ -40,17 +47,28 @@ export default function SendMoney() {
             <p className="font-medium">Amount (in Rs)</p>
             <input
               className="border-2 p-3 rounded-lg placeholder-slate-500"
-              type="text"
+              type="number"
               placeholder="Enter amount"
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => {
+                setShowError(false);
+                setAmount(Number(e.target.value));
+              }}
               value={amount}
             />
             <button
               onClick={handleClick}
-              className="w-full border-2 bg-slate-700 text-white py-2 rounded-lg text-lg"
+              className="w-full border-2 bg-slate-700 text-white py-2 rounded-lg text-lg disabled:bg-slate-400"
+              disabled={amount === 0 || amount < 0}
             >
               Initiate Transfer
             </button>
+            {showError && (
+              <Error>
+                <p className="text-red-700 font-semibold">
+                  Amount cannot be zero or less than zero
+                </p>
+              </Error>
+            )}
           </div>
         </div>
       </section>
