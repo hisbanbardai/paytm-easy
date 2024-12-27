@@ -5,9 +5,22 @@ import axios from "axios";
 export default function Users() {
   const [users, setUsers] = useState([]);
 
-  // useEffect(() => {
-  //   axios.get("http://localhost:3000/api/v1/user/bulk");
-  // }, []);
+  useEffect(() => {
+    async function fetchUsers() {
+      const response = await axios.get(
+        "http://localhost:3000/api/v1/user/bulk",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+
+      setUsers(response.data.users);
+    }
+
+    fetchUsers();
+  }, []);
 
   return (
     <section className="flex flex-col gap-3">
@@ -18,18 +31,20 @@ export default function Users() {
         placeholder="Search users..."
       />
       <div>
-        <User />
+        {users.map((user) => (
+          <User user={user} key={user.id} />
+        ))}
       </div>
     </section>
   );
 }
 
-function User() {
+function User({ user }) {
   return (
     <div className="flex justify-between items-center">
-      <div className="flex gap-2 items-center font-medium text-xl">
-        <Avatar value={"H"} />
-        <p>Hisban Shiraz</p>
+      <div className="flex gap-2 items-center font-medium text-xl mt-4">
+        <Avatar value={user.firstname[0].toUpperCase()} />
+        <p>{user.firstname}</p>
       </div>
       <button className="bg-slate-700 text-white p-3 px-4 rounded-lg">
         Send Money
