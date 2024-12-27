@@ -8,6 +8,7 @@ import axios from "axios";
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import HomeRedirect from "./components/HomeRedirect";
+import TopBar from "./components/TopBar";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -42,6 +43,7 @@ function App() {
 
   return (
     <>
+      <TopBar />
       <Routes>
         <Route
           path="/"
