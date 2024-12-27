@@ -1,7 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Avatar from "./Avatar";
+import { useAuthentication } from "../hooks/useAuthentication";
 
-export default function TopBar({ isAuthenticated }) {
+export default function TopBar() {
+  const isAuthenticated = useAuthentication();
+
   const navigate = useNavigate();
 
   function handleClick() {

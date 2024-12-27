@@ -11,49 +11,16 @@ import HomeRedirect from "./components/HomeRedirect";
 import TopBar from "./components/TopBar";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const location = useLocation();
-
-  useEffect(() => {
-    async function checkAuthentication() {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/v1/auth/validate",
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-          localStorage.removeItem("token");
-        }
-      } catch (error) {
-        setIsAuthenticated(false);
-        localStorage.removeItem("token");
-      }
-    }
-
-    checkAuthentication();
-  }, [location.pathname]);
-
   return (
     <>
-      <TopBar isAuthenticated={isAuthenticated} />
+      <TopBar />
       <Routes>
-        <Route
-          path="/"
-          element={<HomeRedirect isAuthenticated={isAuthenticated} />}
-        />
-        <Route element={<PublicOnlyRoute isAuthenticated={isAuthenticated} />}>
+        <Route path="/" element={<HomeRedirect />} />
+        <Route element={<PublicOnlyRoute />}>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
         </Route>
-        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+        <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/send" element={<SendMoney />} />
         </Route>

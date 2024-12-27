@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthentication } from "../hooks/useAuthentication";
 
-export default function HomeRedirect({ isAuthenticated }) {
+export default function HomeRedirect() {
+  const isAuthenticated = useAuthentication();
   const navigate = useNavigate();
 
   useEffect(() => {
