@@ -1,6 +1,14 @@
+import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
+import axios from "axios";
 
 export default function Users() {
+  const [users, setUsers] = useState([]);
+
+  // useEffect(() => {
+  //   axios.get("http://localhost:3000/api/v1/user/bulk");
+  // }, []);
+
   return (
     <section className="flex flex-col gap-3">
       <h2 className="font-bold text-2xl">Users</h2>

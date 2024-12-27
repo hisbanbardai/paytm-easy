@@ -5,8 +5,10 @@ import Heading from "../components/Heading";
 import InputBox from "../components/InputBox";
 import SubHeading from "../components/SubHeading";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
 
   function handleChange(e) {
@@ -25,6 +27,8 @@ export default function SignIn() {
     );
 
     localStorage.setItem("token", response.data.token);
+
+    navigate("/dashboard");
   }
 
   return (

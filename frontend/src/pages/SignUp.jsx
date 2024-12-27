@@ -5,8 +5,11 @@ import Heading from "../components/Heading";
 import InputBox from "../components/InputBox";
 import SubHeading from "../components/SubHeading";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -42,6 +45,8 @@ export default function SignUp() {
     );
 
     localStorage.setItem("token", response.data.token);
+
+    navigate("/dashboard");
   }
 
   return (
